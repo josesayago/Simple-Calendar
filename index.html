@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+	<head>
+		<title>Simple Calendar</title>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var _dayLabels 	= {};
+			var _dayNames 	= ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+			function _setCalendar( _months ) {
+				var _months 	= ( _months != '' && _months > 0 ) ? _months : 3;
+				var _now 		= new Date();
+				var _monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+				var _calendar 	= {};
+				var _prevMonths, _monthDays, _flag, _month, _days, _matrix;
+				var _daysNow 	= new Date( _now.getYear(), _now.getMonth()+1, 0 ).getDate();
+				_calendar[ _monthNames[ _now.getMonth() ] ] = _daysNow;
+				_dayName( _daysNow, _now, _monthNames );
+				for( _flag = 1; _flag <= _months; _flag++ ) {
+					_prevMonths 	= new Date( _now.setMonth( _now.getMonth() - _flag ) );
+					_monthDays 		= new Date( _prevMonths.getYear(), ( _prevMonths.getMonth() + 1 ), 0 ).getDate();
+					_calendar[ _monthNames[ _prevMonths.getMonth() ] ] = _monthDays;
+					_dayName( _monthDays, _prevMonths, _monthNames );
+					_now 			= new Date( _now.setMonth( _now.getMonth() + _flag ) );
+				}
+				for( _month in _calendar ) {
+					_matrix = '<table class="table-calendar">';
+						_days = _calendar[_month];
+						_matrix+= '<thead>';
+							_matrix+= '<tr>';
+								_matrix+= '<th>';
+									_matrix+= _month;
+								_matrix+= '</th>';
+							_matrix+= '</tr>';
+							for( _flag = 1; _flag <= 7; _flag++ ) {
+								if( _flag % 7 == 1 ) { _matrix+= '<tr>'; }
+								_matrix+= '<th data-day="'+_dayNames[ _flag-1 ]+'">';
+									_matrix+= _dayNames[ _flag-1 ];
+								_matrix+= '</th>';
+								if( _flag % 7 == 0 ) { _matrix+= '</tr>'; }
+							}
+						_matrix+= '</thead>';
+						_matrix+= '<tbody>';
+						for( _flag = 1; _flag <= _days; _flag++ ) {
+							if( _dayLabels[_month][_flag] == 'Sun' ) { console.log( _month + ' | ' + _getIndex( _dayLabels, _month, _dayLabels[_month][_flag] ) ); }
+							if( _flag % 7 == 1 ) { _matrix+= '<tr>'; _xFlag = 0; }
+							_matrix+= '<td data-name="'+_dayLabels[_month][_flag]+'" data-day="'+_dayNames[_xFlag]+'">';
+								_matrix+= _flag;
+							_matrix+= '</td>';
+							_xFlag++;
+							if( _flag % 7 == 0 ) { _matrix+= '</tr>'; _xFlag = 0;  }
+						}
+						_matrix+= '</tbody>';
+					_matrix+= '</table>';
+					document.write( _matrix );
+				}
+			}
+			function _dayName( _monthDays, _prevMonths, _monthNames ) {
+			    for( _xFlag = 1; _xFlag <= _monthDays; _xFlag++ ) {
+					var _xNow = new Date( _prevMonths.getFullYear(), _prevMonths.getMonth(), _xFlag );
+					if( !_dayLabels[ _monthNames[ _prevMonths.getMonth() ] ] ) { _dayLabels[ _monthNames[ _prevMonths.getMonth() ] ] = {}; }
+					_dayLabels[ _monthNames[ _prevMonths.getMonth() ] ][_xFlag] = _dayNames[ _xNow.getDay() ];
+				}
+				return _dayLabels;
+			}
+			function _tableListener() {
+				var _flag, _xFlag, _cells;
+				var _tables = document.querySelectorAll("table[class='table-calendar']");
+				for( _flag = 0; _flag < _tables.length; _flag++ ) {
+					_cells = _tables[_flag].getElementsByTagName("td");
+					for(_xFlag = 0; _xFlag < _cells.length; _xFlag++) {
+					    var _cell 		= _cells[_xFlag];
+					    var _table 		= _tables[_flag];
+				        var _cIndex  	= _cell.cellIndex + 1;  
+				        var _rIndex 	= _cell.parentNode.rowIndex + 1;
+				        var _des 		= _table.rows[1].cells[_cIndex-1];
+				        var _obj 		= _table.rows[_rIndex-1].cells[_cIndex-1];
+				        if( _des.getAttribute('data-day') != _obj.getAttribute('data-name') ) {
+				        	// var _dIndex = _table.querySelectorAll("th[data-day='"+_obj.getAttribute('data-name')+"']")[0].cellIndex;
+				        	//console.log( _table.rows[_rIndex-1].cells[_dIndex].getAttribute('data-name') );
+				        }
+					    /*_cell.onclick = function(){
+					    	var _table 		= this.parentNode.parentNode.parentNode;
+					        var _cIndex  	= this.cellIndex + 1;  
+					        var _rIndex 	= this.parentNode.rowIndex + 1;
+					        var _des 		= _table.rows[1].cells[_cIndex-1];
+					        var _obj 		= _table.rows[_rIndex-1].cells[_cIndex-1];
+					        if( _des.getAttribute('data-day') != _obj.getAttribute('data-name') ) {
+					        	var _dIndex = _table.querySelectorAll("th[data-day='"+_obj.getAttribute('data-name')+"']")[0].cellIndex;
+					        	console.log( _table.rows[_rIndex-1].cells[_dIndex].innerHTML );
+					        }
+					    }*/
+					}
+				}
+			}
+			function _getIndex(array, attr, value) {
+			    for(var i = 0; i < Object.keys(array[attr]).length; i += 1) {
+			        if(array[attr][i] === value) {
+			            return i;
+			        }
+			    }
+			}
+			_setCalendar();
+			_tableListener();
+		</script>
+	</body>
+</html>
