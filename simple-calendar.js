@@ -5,6 +5,7 @@
  * @author  Jose SAYAGO
  * @email   jose.sayago@laelite.info
  * @url 	https://github.com/josesayago
+ * @date 	March 21, 2015
  */
 var _dayLabels 	= {};
 var _dayNames 	= ['Su','Mo','Tu','We','Th','Fr','Sa'];
