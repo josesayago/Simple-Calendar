@@ -20,7 +20,7 @@
 	border-bottom-right-radius: 5px;
 }
 .table-calendar thead tr:first-child th {
-	color: rgba(219,219,219,1);
+	color: rgba(100,100,100,1);
 	padding-bottom: .5em;
 }
 .table-calendar thead tr:nth-child(2) { 
