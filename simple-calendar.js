@@ -125,7 +125,7 @@ function _setCalendar( _months ) {
 /**
  * Day Names
  *
- * Get name for any given name
+ * Get name for any given day
  *
  * @params _monthDays date object
  * @params _prevMonths date object
