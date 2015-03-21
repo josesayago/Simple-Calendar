@@ -115,7 +115,7 @@ function _setCalendar( _months ) {
 			}
 			_matrix[_core]+= '</tbody>';
 		_matrix[_core]+= '</table>';
-		_core--;						
+		_core--;
 	}
 	// Display Calendar
 	for( _flag = 0; _flag < _matrix.length; _flag++ ) {
