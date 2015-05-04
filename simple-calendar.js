@@ -3,7 +3,7 @@
  * Simple Calendar
  *
  * @author  Jose SAYAGO
- * @email   jose.sayago@laelite.info
+ * @email   jose@wplatino.com
  * @url 	https://github.com/josesayago
  * @date 	March 21, 2015
  */
